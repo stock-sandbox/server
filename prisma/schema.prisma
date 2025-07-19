@@ -19,7 +19,6 @@ datasource db {
 model User {
   id        String   @id @default(cuid()) // 고유 식별자
   email     String   @unique // 로그인에 사용할 이메일
-  password  String // 해시된 비밀번호
   nickname  String   @unique // 닉네임
   cash      Decimal  @default(100000000) // 보유 현금 (초기값 1억)
   createdAt DateTime @default(now())
