@@ -1,0 +1,93 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// 사용자 모델
+model User {
+  id        String   @id @default(cuid()) // 고유 식별자
+  email     String   @unique // 로그인에 사용할 이메일
+  password  String // 해시된 비밀번호
+  nickname  String   @unique // 닉네임
+  cash      Decimal  @default(100000000) // 보유 현금 (초기값 1억)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  holdings Holding[] // 보유 자산 목록
+  trades   Trade[] // 거래 기록
+  ranking  Ranking? // 랭킹 정보 (1:1 관계)
+}
+
+// 자산(주식) 모델
+model Asset {
+  id           String     @id @default(cuid())
+  ticker       String     @unique // 종목 코드 (예: 005930, AAPL)
+  name         String // 종목명 (예: 삼성전자, Apple Inc.)
+  market       MarketType // 시장 구분 (국내/해외)
+  currentPrice Decimal    @default(0) // 현재가 (API로 주기적 업데이트 필요)
+
+  holdings Holding[]
+  trades   Trade[]
+}
+
+// 사용자가 보유한 자산 모델
+model Holding {
+  id           String  @id @default(cuid())
+  userId       String
+  assetId      String
+  quantity     Int // 보유 수량
+  averagePrice Decimal // 평균 매수 단가
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  asset Asset @relation(fields: [assetId], references: [id])
+
+  @@unique([userId, assetId]) // 사용자는 동일 자산을 하나의 레코드로만 보유
+}
+
+// 거래 기록 모델
+model Trade {
+  id        String    @id @default(cuid())
+  userId    String
+  assetId   String
+  type      TradeType // 거래 종류 (매수/매도)
+  quantity  Int // 거래 수량
+  price     Decimal // 거래 단가
+  timestamp DateTime  @default(now()) // 거래 시각
+
+  user  User  @relation(fields: [userId], references: [id])
+  asset Asset @relation(fields: [assetId], references: [id])
+}
+
+// 랭킹 모델
+model Ranking {
+  id              Int      @id @default(autoincrement())
+  userId          String   @unique
+  totalAssetValue Decimal // 총 자산 가치 (보유현금 + 보유주식 평가액)
+  rank            Int // 순위
+  lastCalculated  DateTime @updatedAt // 마지막 랭킹 계산 시점
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// Enum 타입 정의
+enum MarketType {
+  DOMESTIC // 국내
+  OVERSEAS // 해외
+}
+
+enum TradeType {
+  BUY
+  SELL
+}
