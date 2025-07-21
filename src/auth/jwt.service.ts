@@ -20,14 +20,14 @@ export class JwtAuthService {
   // JWT 토큰 생성
   generateTokens(payload: JwtPayload) {
     const accessToken = this.jwtService.sign(payload, {
-      secret: this.configService.get<string>('JWT_ACCESS_SECRET'),
+      secret: this.configService.get<string>('JWT_SECRET'),
       expiresIn: '1h', // 1시간
     });
 
     const refreshToken = this.jwtService.sign(
       { sub: payload.sub },
       {
-        secret: this.configService.get<string>('JWT_REFRESH_SECRET'),
+        secret: this.configService.get<string>('JWT_SECRET'),
         expiresIn: '7d', // 7일
       },
     );
@@ -41,14 +41,14 @@ export class JwtAuthService {
   // Access Token 검증
   verifyAccessToken(token: string): JwtPayload {
     return this.jwtService.verify(token, {
-      secret: this.configService.get<string>('JWT_ACCESS_SECRET'),
+      secret: this.configService.get<string>('JWT_SECRET'),
     });
   }
 
   // Refresh Token 검증
   verifyRefreshToken(token: string) {
     return this.jwtService.verify(token, {
-      secret: this.configService.get<string>('JWT_REFRESH_SECRET'),
+      secret: this.configService.get<string>('JWT_SECRET'),
     });
   }
 }
