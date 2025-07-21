@@ -3,3 +3,4 @@ alwaysApply: true
 ---
 
 - 패키지매니저는 pnpm을 사용한다.
+- nest 폴더 구조 및 파일명은 nestjs 철학을 지킨다.
