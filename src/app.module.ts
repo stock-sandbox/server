@@ -7,6 +7,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { TokenSchedulerModule } from './token-scheduler/token-scheduler.module';
+import { KisApiModule } from './kis-api/kis-api.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { TokenSchedulerModule } from './token-scheduler/token-scheduler.module';
     SupabaseModule,
     PrismaModule,
     TokenSchedulerModule,
+    KisApiModule,
   ],
   controllers: [AppController],
   providers: [AppService],
