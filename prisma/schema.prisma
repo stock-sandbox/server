@@ -90,3 +90,12 @@ enum TradeType {
   BUY
   SELL
 }
+
+// 한국투자증권 API 토큰 저장 모델
+model KisAccessToken {
+  id          String   @id @default(cuid())
+  accessToken String   @db.Text // 액세스 토큰 (긴 문자열이므로 TEXT 타입)
+  createdAt   DateTime @default(now()) // 토큰 생성 시각
+  expiresAt   DateTime // 토큰 만료 시각 (24시간 후)
+  isActive    Boolean  @default(true) // 활성화 상태
+}
