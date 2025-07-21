@@ -1,98 +1,75 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Paper Trade Server
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+가상 투자 시뮬레이션 백엔드 서버입니다.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## 주요 기능
 
-## Description
+- 사용자 인증 (Kakao OAuth)
+- 가상 주식 거래 시뮬레이션
+- 포트폴리오 관리
+- 랭킹 시스템
+- **한국투자증권 API 연동** ✨
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## 한국투자증권 API 기능
 
-## Project setup
+### 자동 토큰 관리
 
-```bash
-$ pnpm install
-```
+- 서버 시작시 자동 토큰 발급
+- 매일 오전 9시 자동 토큰 갱신
+- 만료된 토큰 자동 정리
 
-## Compile and run the project
+### 백엔드 토큰 관리
+
+- 완전 자동화된 토큰 생명주기 관리
+- 다른 서비스에서 `TokenSchedulerService` 주입하여 사용
+- 서버 로그를 통한 토큰 상태 모니터링
+
+자세한 설정 방법은 [KIS-API-SETUP.md](/docs/KIS-API-SETUP.md)를 참조하세요.
+
+## 환경 설정
 
 ```bash
-# development
-$ pnpm run start
+# 의존성 설치
+pnpm install
 
-# watch mode
-$ pnpm run start:dev
+# 환경변수 설정
+cp .env.example .env
+# .env 파일에 필요한 값들을 입력하세요
 
-# production mode
-$ pnpm run start:prod
+# 데이터베이스 마이그레이션
+pnpm dlx prisma migrate dev
+
+# 개발 서버 시작
+pnpm run start:dev
 ```
 
-## Run tests
+## 필수 환경변수
 
-```bash
-# unit tests
-$ pnpm run test
+```env
+# 데이터베이스
+DATABASE_URL="your-database-url"
+DIRECT_URL="your-direct-url"
 
-# e2e tests
-$ pnpm run test:e2e
+# Supabase
+SUPABASE_URL="your-supabase-url"
+SUPABASE_ANON_KEY="your-supabase-key"
 
-# test coverage
-$ pnpm run test:cov
+# 한국투자증권 API
+KIS_API_URL="https://openapi.koreainvestment.com:9443"
+KIS_API_KEY="your-kis-api-key"
+KIS_API_SECRET="your-kis-api-secret"
+
+# JWT
+JWT_SECRET="your-jwt-secret"
+
+# 프론트엔드 URL
+FRONTEND_URL="your-frontend-url"
 ```
 
-## Deployment
+## 기술 스택
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ pnpm install -g @nestjs/mau
-$ mau deploy
-```
-
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+- **Framework**: NestJS
+- **Database**: Supabase + Prisma
+- **Scheduler**: @nestjs/schedule
+- **HTTP Client**: @nestjs/axios
+- **External API**: 한국투자증권 Open API
