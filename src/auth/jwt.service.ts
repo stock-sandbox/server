@@ -51,9 +51,4 @@ export class JwtAuthService {
       secret: this.configService.get<string>('JWT_REFRESH_SECRET'),
     });
   }
-
-  // 토큰에서 payload 추출 (검증 없이)
-  decodeToken(token: string) {
-    return this.jwtService.decode(token) as JwtPayload;
-  }
 }
