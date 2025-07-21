@@ -6,37 +6,12 @@ import {
   HttpStatus,
   Logger,
 } from '@nestjs/common';
+import { VolumeRankService } from './volume-rank.service';
+import { VolumeRankQueryDto } from './dto/volume-rank.dto';
 import {
-  VolumeRankService,
-  VolumeRankDto,
   VolumeRankOptions,
-} from './volume-rank.service';
-import { IsOptional, IsIn, IsInt, Min, Max } from 'class-validator';
-import { Transform } from 'class-transformer';
-
-// 거래량 순위 조회 Query DTO
-export class VolumeRankQueryDto {
-  @IsOptional()
-  @IsIn(['KOSPI', 'KOSDAQ'])
-  market?: 'KOSPI' | 'KOSDAQ' = 'KOSPI';
-
-  @IsOptional()
-  @Transform(({ value }) => parseInt(value, 10))
-  @IsInt()
-  @Min(1)
-  @Max(100)
-  count?: number = 20;
-}
-
-// API 응답 형태
-export interface VolumeRankApiResponse {
-  success: boolean;
-  message: string;
-  data: VolumeRankDto[];
-  timestamp: string;
-  market: string;
-  count: number;
-}
+  VolumeRankApiResponse,
+} from './interfaces/volume-rank.interface';
 
 @Controller('kis-api')
 export class KisApiController {
