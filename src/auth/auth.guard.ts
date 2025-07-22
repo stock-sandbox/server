@@ -35,28 +35,18 @@ export class AuthGuard implements CanActivate {
       if (!user) {
         throw new UnauthorizedException('사용자를 찾을 수 없습니다.');
       }
-
-      // 요청 객체에 사용자 정보 추가
-      (request as any).user = user;
-    } catch (error) {
+    } catch {
       throw new UnauthorizedException('유효하지 않은 토큰입니다.');
     }
 
     return true;
   }
 
-  // Authorization 헤더 또는 쿠키에서 토큰 추출
+  // Authorization 헤더에서 토큰 추출
   private extractToken(request: Request): string | undefined {
-    // 1. Authorization 헤더에서 토큰 확인 (우선순위 높음)
     const [type, token] = request.headers.authorization?.split(' ') ?? [];
     if (type === 'Bearer' && token) {
       return token;
-    }
-
-    // 2. 쿠키에서 토큰 확인
-    const cookieToken = (request as any).cookies?.accessToken;
-    if (cookieToken) {
-      return cookieToken;
     }
 
     return undefined;

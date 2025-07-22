@@ -19,7 +19,7 @@ export class AuthService {
   ) {}
 
   // 카카오 로그인 URL 생성
-  async getKakaoLoginUrl(): Promise<{ url: string }> {
+  getKakaoLoginUrl(): { url: string } {
     const clientId = this.configService.get<string>('KAKAO_CLIENT_ID');
     const redirectUri = this.configService.get<string>('KAKAO_REDIRECT_URI');
 
@@ -75,7 +75,7 @@ export class AuthService {
       }
 
       return user;
-    } catch (error) {
+    } catch {
       throw new UnauthorizedException('유효하지 않은 토큰입니다.');
     }
   }
@@ -103,7 +103,7 @@ export class AuthService {
       };
 
       return this.jwtAuthService.generateTokens(newPayload);
-    } catch (error) {
+    } catch {
       throw new UnauthorizedException('유효하지 않은 refresh token입니다.');
     }
   }
@@ -136,8 +136,8 @@ export class AuthService {
         throw new Error(`카카오 토큰 요청 실패: ${response.status}`);
       }
 
-      return await response.json();
-    } catch (error) {
+      return (await response.json()) as KakaoTokenResponse;
+    } catch {
       throw new UnauthorizedException('카카오 토큰 획득에 실패했습니다.');
     }
   }
@@ -159,8 +159,8 @@ export class AuthService {
         throw new Error(`카카오 사용자 정보 요청 실패: ${response.status}`);
       }
 
-      return await response.json();
-    } catch (error) {
+      return (await response.json()) as KakaoUserInfo;
+    } catch {
       throw new UnauthorizedException(
         '카카오 사용자 정보 조회에 실패했습니다.',
       );

@@ -46,7 +46,7 @@ export class JwtAuthService {
   }
 
   // Refresh Token 검증
-  verifyRefreshToken(token: string) {
+  verifyRefreshToken(token: string): JwtPayload {
     return this.jwtService.verify(token, {
       secret: this.configService.get<string>('JWT_SECRET'),
     });

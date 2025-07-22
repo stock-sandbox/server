@@ -4,6 +4,7 @@ import { HttpService } from '@nestjs/axios';
 import { TokenSchedulerService } from '../token-scheduler/token-scheduler.service';
 import { firstValueFrom } from 'rxjs';
 import { KisApiError } from './types/kis.types';
+import { AxiosError } from 'axios';
 
 @Injectable()
 export class KisApiService {
@@ -126,8 +127,8 @@ export class KisApiService {
    * API 에러를 처리합니다
    * @param error axios 에러 객체
    */
-  private handleApiError(error: any): never {
-    if (error.response?.data) {
+  private handleApiError(error: unknown): never {
+    if (error instanceof AxiosError && error.response?.data) {
       const kisError = error.response.data as KisApiError;
       throw new HttpException(
         {

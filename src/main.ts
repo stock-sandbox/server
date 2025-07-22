@@ -83,4 +83,4 @@ async function bootstrap() {
     `📚 API Documentation: http://localhost:${process.env.PORT ?? 8000}/api`,
   );
 }
-bootstrap();
+void bootstrap();

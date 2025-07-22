@@ -1,5 +1,5 @@
 import { IsOptional, IsIn, IsInt, Min, Max } from 'class-validator';
-import { Transform } from 'class-transformer';
+import { Transform, TransformFnParams } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class VolumeRankQueryDto {
@@ -24,7 +24,9 @@ export class VolumeRankQueryDto {
     required: false,
   })
   @IsOptional()
-  @Transform(({ value }) => parseInt(value, 10))
+  @Transform(({ value }: TransformFnParams): number =>
+    parseInt(String(value), 10),
+  )
   @IsInt()
   @Min(1)
   @Max(100)

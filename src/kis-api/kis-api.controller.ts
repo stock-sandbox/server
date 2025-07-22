@@ -95,12 +95,24 @@ export class KisApiController {
         throw error;
       }
 
-      // 일반 에러인 경우
+      if (error instanceof Error) {
+        // 일반 에러인 경우
+        throw new HttpException(
+          {
+            success: false,
+            message: '거래량 순위 조회 중 오류가 발생했습니다',
+            error: error.message,
+            timestamp: new Date().toISOString(),
+          },
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      }
+
       throw new HttpException(
         {
           success: false,
           message: '거래량 순위 조회 중 오류가 발생했습니다',
-          error: error.message || '알 수 없는 오류',
+          error: '알 수 없는 오류',
           timestamp: new Date().toISOString(),
         },
         HttpStatus.INTERNAL_SERVER_ERROR,

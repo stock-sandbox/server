@@ -43,7 +43,7 @@ export class AuthController {
     type: KakaoLoginUrlResponse,
   })
   @Get('kakao')
-  async getKakaoLoginUrl(): Promise<KakaoLoginUrlResponse> {
+  getKakaoLoginUrl(): KakaoLoginUrlResponse {
     return this.authService.getKakaoLoginUrl();
   }
 
@@ -97,7 +97,13 @@ export class AuthController {
 
       return res.redirect(`${frontendUrl}/bff-api/auth/callback`);
     } catch (error) {
-      const errorMessage = encodeURIComponent(error.message || '로그인_실패');
+      if (error instanceof Error) {
+        const errorMessage = encodeURIComponent(error.message || '로그인_실패');
+        return res.redirect(
+          `${frontendUrl}/auth/error?message=${errorMessage}`,
+        );
+      }
+      const errorMessage = encodeURIComponent('로그인_실패');
       return res.redirect(`${frontendUrl}/auth/error?message=${errorMessage}`);
     }
   }
