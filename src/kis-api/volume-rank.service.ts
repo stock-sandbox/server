@@ -4,8 +4,8 @@ import {
   VolumeRankRequest,
   VolumeRankResponse,
   VolumeRankItem,
-  VOLUME_RANK_CONFIG,
-} from './types/kis.types';
+} from './types/volume-rank.types';
+import { VOLUME_RANK_CONFIG } from './config/kis.config';
 import {
   VolumeRankOptions,
   VolumeRankDto,
