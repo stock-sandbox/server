@@ -10,7 +10,6 @@ import {
   ApiTags,
   ApiOperation,
   ApiResponse,
-  ApiQuery,
   ApiBadRequestResponse,
   ApiInternalServerErrorResponse,
 } from '@nestjs/swagger';
@@ -38,7 +37,6 @@ export class KisApiController {
     description: `
       한국투자증권 API를 통해 실시간 거래량 순위를 조회합니다.
       
-      - 코스피(KOSPI) 또는 코스닥(KOSDAQ) 시장별 조회 가능
       - 최대 100개 종목까지 조회 가능
       - 실시간 거래량, 현재가, 변동률 등의 정보 제공
     `,
@@ -59,14 +57,11 @@ export class KisApiController {
     @Query() query: VolumeRankQueryDto,
   ): Promise<VolumeRankApiResponse> {
     try {
-      const { market = 'KOSPI', count = 20 } = query;
+      const { count = 20 } = query;
 
-      this.logger.log(
-        `거래량 순위 조회 요청 - 시장: ${market}, 개수: ${count}`,
-      );
+      this.logger.log(`한국거래소 거래량 순위 조회 요청 -  개수: ${count}`);
 
       const options: VolumeRankOptions = {
-        market,
         count,
       };
 
@@ -78,7 +73,6 @@ export class KisApiController {
         message: '거래량 순위 조회 성공',
         data: volumeRankList,
         timestamp: new Date().toISOString(),
-        market,
         count: volumeRankList.length,
       };
 
@@ -118,75 +112,5 @@ export class KisApiController {
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
-  }
-
-  /**
-   * 코스피 거래량 순위 (편의 메서드)
-   */
-  @ApiOperation({
-    summary: '코스피 거래량 순위 조회',
-    description:
-      '코스피(KOSPI) 시장의 거래량 순위를 조회하는 편의 메서드입니다.',
-  })
-  @ApiQuery({
-    name: 'count',
-    required: false,
-    description: '조회할 종목 수 (기본값: 20)',
-    type: 'integer',
-    minimum: 1,
-    maximum: 100,
-    example: 20,
-  })
-  @ApiResponse({
-    status: 200,
-    description: '코스피 거래량 순위 조회 성공',
-    type: VolumeRankApiResponse,
-  })
-  @ApiBadRequestResponse({
-    description: '잘못된 요청 파라미터',
-  })
-  @ApiInternalServerErrorResponse({
-    description: '서버 내부 오류 또는 KIS API 호출 실패',
-  })
-  @Get('volume-rank/kospi')
-  async getKospiVolumeRank(
-    @Query('count') count: number = 20,
-  ): Promise<VolumeRankApiResponse> {
-    return this.getVolumeRank({ market: 'KOSPI', count });
-  }
-
-  /**
-   * 코스닥 거래량 순위 (편의 메서드)
-   */
-  @ApiOperation({
-    summary: '코스닥 거래량 순위 조회',
-    description:
-      '코스닥(KOSDAQ) 시장의 거래량 순위를 조회하는 편의 메서드입니다.',
-  })
-  @ApiQuery({
-    name: 'count',
-    required: false,
-    description: '조회할 종목 수 (기본값: 20)',
-    type: 'integer',
-    minimum: 1,
-    maximum: 100,
-    example: 20,
-  })
-  @ApiResponse({
-    status: 200,
-    description: '코스닥 거래량 순위 조회 성공',
-    type: VolumeRankApiResponse,
-  })
-  @ApiBadRequestResponse({
-    description: '잘못된 요청 파라미터',
-  })
-  @ApiInternalServerErrorResponse({
-    description: '서버 내부 오류 또는 KIS API 호출 실패',
-  })
-  @Get('volume-rank/kosdaq')
-  async getKosdaqVolumeRank(
-    @Query('count') count: number = 20,
-  ): Promise<VolumeRankApiResponse> {
-    return this.getVolumeRank({ market: 'KOSDAQ', count });
   }
 }

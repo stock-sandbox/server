@@ -65,7 +65,7 @@ async function bootstrap() {
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document, {
+  SwaggerModule.setup('api/docs', app, document, {
     swaggerOptions: {
       persistAuthorization: true, // 새로고침해도 토큰 유지
       tagsSorter: 'alpha', // 태그 알파벳 순 정렬

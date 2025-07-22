@@ -2,7 +2,6 @@ import { ApiProperty } from '@nestjs/swagger';
 
 // 거래량 순위 조회 옵션
 export interface VolumeRankOptions {
-  market?: 'KOSPI' | 'KOSDAQ'; // 시장 구분
   count?: number; // 조회할 종목 수 (기본 20)
 }
 
@@ -58,9 +57,6 @@ export class VolumeRankApiResponse {
     example: '2024-01-15T09:30:00.000Z',
   })
   timestamp: string;
-
-  @ApiProperty({ description: '조회한 시장', example: 'KOSPI' })
-  market: string;
 
   @ApiProperty({ description: '실제 조회된 종목 수', example: 20 })
   count: number;

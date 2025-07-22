@@ -4,17 +4,6 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class VolumeRankQueryDto {
   @ApiProperty({
-    description: '조회할 시장 구분',
-    enum: ['KOSPI', 'KOSDAQ'],
-    default: 'KOSPI',
-    example: 'KOSPI',
-    required: false,
-  })
-  @IsOptional()
-  @IsIn(['KOSPI', 'KOSDAQ'])
-  market?: 'KOSPI' | 'KOSDAQ' = 'KOSPI';
-
-  @ApiProperty({
     description: '조회할 종목 수 (최대 100개)',
     minimum: 1,
     maximum: 100,
@@ -29,6 +18,6 @@ export class VolumeRankQueryDto {
   )
   @IsInt()
   @Min(1)
-  @Max(100)
+  @Max(30)
   count?: number = 20;
 }

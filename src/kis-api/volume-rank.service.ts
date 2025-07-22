@@ -5,7 +5,6 @@ import {
   VolumeRankResponse,
   VolumeRankItem,
   VOLUME_RANK_CONFIG,
-  MARKET_CODES,
 } from './types/kis.types';
 import {
   VolumeRankOptions,
@@ -26,11 +25,11 @@ export class VolumeRankService {
   async getVolumeRank(
     options: VolumeRankOptions = {},
   ): Promise<VolumeRankDto[]> {
-    const { market = 'KOSPI', count = 20 } = options;
+    const { count = 20 } = options;
 
     // 요청 파라미터 구성
     const params: VolumeRankRequest = {
-      FID_COND_MRKT_DIV_CODE: MARKET_CODES[market], // 시장 구분
+      FID_COND_MRKT_DIV_CODE: 'J', // 시장 구분
       FID_COND_SCR_DIV_CODE: '20170', // 거래량상위 화면 코드
       FID_INPUT_ISCD: '0000', // 입력 종목코드 (전체)
       FID_DIV_CLS_CODE: '0', // 분류구분코드 (전체)
@@ -44,9 +43,7 @@ export class VolumeRankService {
     };
 
     try {
-      this.logger.log(
-        `거래량 순위 조회 시작 - 시장: ${market}, 개수: ${count}`,
-      );
+      this.logger.log(`한국거래소 거래량 순위 조회 시작 - 개수: ${count}`);
 
       const response = await this.kisApiService.get<VolumeRankResponse>(
         VOLUME_RANK_CONFIG.PATH,

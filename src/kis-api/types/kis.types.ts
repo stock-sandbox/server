@@ -68,9 +68,3 @@ export const VOLUME_RANK_CONFIG = {
   TR_ID: 'FHPST01710000', // 거래량 순위 조회 TR_ID
   PATH: '/uapi/domestic-stock/v1/quotations/volume-rank',
 } as const;
-
-// 시장 구분 코드
-export const MARKET_CODES = {
-  KOSPI: 'J',
-  KOSDAQ: 'Q',
-} as const;
