@@ -83,7 +83,7 @@ export class KisApiService {
         }),
       );
 
-      this.logger.debug(`KIS API 응답 성공: ${url}`, response.data);
+      this.logger.debug(`KIS API 응답 성공: ${url}`);
       return response.data;
     } catch (error) {
       this.logger.error(`KIS API 요청 실패: ${path}`, error);
